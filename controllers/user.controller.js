@@ -51,12 +51,12 @@ export const usersPut = async(req, res = response) => {
 
 export const usersDelete = async(req, res = response) => {
   const { id } = req.params;
-  // Fisicamente
-  // const userDeleted = await modelUser.findByIdAndDelete(id);
+  
   const userDeleted = await modelUser.findByIdAndUpdate(id, {status: false},
                                                             {new: true});
+
   res.json({
-    userDeleted
+    userDeleted,
   });
 }
 
