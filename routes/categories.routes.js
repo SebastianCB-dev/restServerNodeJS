@@ -1,27 +1,27 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
 
-import { createCategory } from '../controllers/categories.controller.js';
+import { createCategory, 
+         deleteCategoryByID, 
+         getCategories, 
+         getCategoryById, 
+         updateCategoryByID} from '../controllers/categories.controller.js';
 
 import { middlewares } from '../middlewares/index.js';
+import { categoryExists } from '../helpers/db-validators.js';
+import { jwt_validation } from '../middlewares/jwt-validation.js';
 
 export const routerCategories = Router();
 
 // Get all categories - public
-routerCategories.get('/', (req, res) => {
-  res.json({
-    msg: 'get API - categories',
-  });
-});
+routerCategories.get('/', getCategories);
 
 // Get a category by id - public
 routerCategories.get('/:id',[
-  check('id').custom(existsCategoryById),
-] ,(req, res) => {
-  res.json({
-    msg: 'get API - categories with id',
-  });
-});
+  check('id').isMongoId(),
+  check('id').custom(categoryExists),
+  middlewares.fieldsValidator
+], getCategoryById);
 
 // Create a new category - private - with a valid token
 routerCategories.post('/', [
@@ -32,16 +32,20 @@ routerCategories.post('/', [
 );
 
 // Update a category by id - private - with a valid token
-routerCategories.put('/:id', (req, res) => {
-  res.json({
-    msg: 'put API - categories',
-  });
-});
+routerCategories.put('/:id', [
+  middlewares.jwt_validation,
+  check('id').isMongoId(),
+  check('id').custom(categoryExists),
+  check('name', 'name is required').not().isEmpty(),
+  middlewares.fieldsValidator
+], updateCategoryByID);
 
 // Delete a category by id - private - ADMIN
 // Only change the category's status to false
-routerCategories.delete('/:id', (req, res) => {
-  res.json({
-    msg: 'delete API - categories',
-  });
-});
+routerCategories.delete('/:id', [
+  jwt_validation,
+  check('id').isMongoId(),
+  check('id').custom(categoryExists),
+  middlewares.isAdminRole,
+  middlewares.jwt_validation
+], deleteCategoryByID);
