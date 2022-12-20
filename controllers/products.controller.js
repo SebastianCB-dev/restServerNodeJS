@@ -16,7 +16,7 @@ export const getProducts = async(req, res) => {
                   .populate('category', 'name')
   ]);
 
-  res.json({
+  return res.json({
     total,
     products
   });
@@ -30,7 +30,7 @@ export const getProduct = async(req, res) => {
                                .populate('user', 'name')
                                .populate('category', 'name');
 
-  res.json(product);
+  return res.json(product);
 
 }
 
@@ -49,7 +49,7 @@ export const createProduct = async(req, res) => {
 
   await newProduct.save();
 
-  res.status(201).json(newProduct);
+  return res.status(201).json(newProduct);
 }
 
 // Update a product
@@ -60,7 +60,7 @@ export const updateProduct = async(req, res) => {
 
   const product = await Product.findByIdAndUpdate(id, { name, prize, available, description, user, category }, { new: true });
 
-  res.json(product);
+  return res.json(product);
 
 }
 
@@ -70,5 +70,5 @@ export const deleteProduct = async(req, res) => {
 
   const product = await Product.findByIdAndUpdate(id, { status: false }, { new: true });
 
-  res.json(product);
+  return res.json(product);
 }
