@@ -4,6 +4,7 @@ import cors from 'cors';
 import { routerAuth } from '../routes/auth.routes.js';
 import { routerCategories } from '../routes/categories.routes.js';
 import { routerUsers } from '../routes/user.routes.js';
+import { routerProducts } from '../routes/products.routes.js';
 
 import { dbConnection } from '../database/config.db.js';
 
@@ -15,8 +16,9 @@ export class Server {
     this.paths = {
       auth: '/api/auth',
       categories: '/api/categories',
+      products: '/api/products',
       users: '/api/users'
-    };        
+    };
     
     // Connection DB
     this.connectDB();
@@ -42,6 +44,7 @@ export class Server {
   routes() {
     this.app.use(this.paths.auth, routerAuth);
     this.app.use(this.paths.categories, routerCategories);
+    this.app.use(this.paths.products, routerProducts);
     this.app.use(this.paths.users, routerUsers);
   }
 

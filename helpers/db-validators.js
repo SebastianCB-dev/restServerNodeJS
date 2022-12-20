@@ -1,7 +1,7 @@
 import { roleModel } from "../models/role.js";
 import { modelUser } from "../models/user.js";
 
-import { Category } from '../models/index.js';
+import { Category, Product } from '../models/index.js';
 
 export const isValidRole = async(role = '') => {
   const isExists = await roleModel.findOne({role});
@@ -32,5 +32,17 @@ export const categoryExists = async (id = '') => {
                                  .where({status: true});
   if(!category) {
     throw new Error('Category does not exist');
+  }
+}
+
+
+export const productExists = async (id = '') => {
+  if (!id) {
+    throw new Error('ID is required');
+  }
+  const product = await Product.findById(id)
+    .where({ status: true });
+  if (!product) {
+    throw new Error('Product does not exist');
   }
 }
