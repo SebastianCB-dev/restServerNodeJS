@@ -18,7 +18,7 @@ routerCategories.get('/', getCategories);
 
 // Get a category by id - public
 routerCategories.get('/:id',[
-  check('id').isMongoId(),
+  check('id', 'This is not a Mongo ID').isMongoId(),
   check('id').custom(categoryExists),
   middlewares.fieldsValidator
 ], getCategoryById);
@@ -34,7 +34,7 @@ routerCategories.post('/', [
 // Update a category by id - private - with a valid token
 routerCategories.put('/:id', [
   middlewares.jwt_validation,
-  check('id').isMongoId(),
+  check('id', 'This is not a Mongo ID').isMongoId(),
   check('id').custom(categoryExists),
   check('name', 'name is required').not().isEmpty(),
   middlewares.fieldsValidator
@@ -43,9 +43,9 @@ routerCategories.put('/:id', [
 // Delete a category by id - private - ADMIN
 // Only change the category's status to false
 routerCategories.delete('/:id', [
-  jwt_validation,
+  middlewares.jwt_validation,
+  middlewares.isAdminRole,
   check('id').isMongoId(),
   check('id').custom(categoryExists),
-  middlewares.isAdminRole,
-  middlewares.jwt_validation
+  middlewares.fieldsValidator
 ], deleteCategoryByID);
