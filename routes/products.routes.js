@@ -37,9 +37,8 @@ routerProducts.put('/:id', [
   middlewares.jwt_validation,
   check('id', 'id is not valid').isMongoId(),
   check('id', 'Product does not exists').custom(productExists),
-  check('category', 'category id is required').isMongoId(),
-  check('category', 'Category does not exists').custom(categoryExists),
-
+  check('category', 'category id is required').optional().isMongoId(),
+  check('category', 'Category does not exists').optional().custom(categoryExists),
   middlewares.fieldsValidator
 ], updateProduct);
 

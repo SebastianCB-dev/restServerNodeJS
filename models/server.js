@@ -7,6 +7,7 @@ import { routerUsers } from '../routes/user.routes.js';
 import { routerProducts } from '../routes/products.routes.js';
 
 import { dbConnection } from '../database/config.db.js';
+import { routerSearch } from '../routes/search.routes.js';
 
 export class Server {
 
@@ -17,7 +18,8 @@ export class Server {
       auth: '/api/auth',
       categories: '/api/categories',
       products: '/api/products',
-      users: '/api/users'
+      users: '/api/users',
+      search: '/api/search'
     };
     
     // Connection DB
@@ -45,6 +47,7 @@ export class Server {
     this.app.use(this.paths.auth, routerAuth);
     this.app.use(this.paths.categories, routerCategories);
     this.app.use(this.paths.products, routerProducts);
+    this.app.use(this.paths.search, routerSearch);
     this.app.use(this.paths.users, routerUsers);
   }
 

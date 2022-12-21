@@ -57,8 +57,11 @@ export const updateProduct = async(req, res) => {
   const { id } = req.params; 
   const { name, prize, available, description, category } = req.body;
   const user = req.user._id;
-
-  const product = await Product.findByIdAndUpdate(id, { name, prize, available, description, user, category }, { new: true });
+  let nameUpper = '';
+  if(name){
+    nameUpper = name.toUpperCase();
+  }
+  const product = await Product.findByIdAndUpdate(id, { name: nameUpper, prize, available, description, user, category }, { new: true });
 
   return res.json(product);
 
