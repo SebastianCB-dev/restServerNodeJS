@@ -5,3 +5,5 @@
 "express": "^4.18.2",
 "express-validator": "^6.14.2",
 "mongoose": "^6.7.3"
+"express-fileupload" -> Carga de archivos
+"cloudinary" -> API Imagenes, videos, etc, para subir

@@ -1,13 +1,15 @@
 import express from 'express';
 import cors from 'cors';
+import fileUpload from 'express-fileupload';
 
 import { routerAuth } from '../routes/auth.routes.js';
 import { routerCategories } from '../routes/categories.routes.js';
-import { routerUsers } from '../routes/user.routes.js';
 import { routerProducts } from '../routes/products.routes.js';
+import { routerSearch } from '../routes/search.routes.js';
+import { routerUpload } from '../routes/upload.routes.js';
+import { routerUsers } from '../routes/user.routes.js';
 
 import { dbConnection } from '../database/config.db.js';
-import { routerSearch } from '../routes/search.routes.js';
 
 export class Server {
 
@@ -18,6 +20,7 @@ export class Server {
       auth: '/api/auth',
       categories: '/api/categories',
       products: '/api/products',
+      uploads: '/api/uploads',
       users: '/api/users',
       search: '/api/search'
     };
@@ -41,6 +44,13 @@ export class Server {
     this.app.use(cors());
     // Public Dir
     this.app.use(express.static('public'));
+
+    // File Upload
+    this.app.use(fileUpload({
+      useTempFiles: true,
+      tempFileDir: '/tmp/',
+      createParentPath: true
+    })); 
   }
 
   routes() {
@@ -49,6 +59,7 @@ export class Server {
     this.app.use(this.paths.products, routerProducts);
     this.app.use(this.paths.search, routerSearch);
     this.app.use(this.paths.users, routerUsers);
+    this.app.use(this.paths.uploads, routerUpload);
   }
 
   start() {

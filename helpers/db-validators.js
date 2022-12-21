@@ -46,3 +46,11 @@ export const productExists = async (id = '') => {
     throw new Error('Product does not exist');
   }
 }
+
+export const allowedCollections = (collection = '', collections = []) => {
+  const included = collections.includes(collection);
+  if (!included) {
+    throw new Error(`This collection is not allowed: ${collection}, allowed collections: ${collections}`);
+  }
+  return true;
+}
